@@ -32,8 +32,10 @@ def clickImage(image, path="E:/Python Programs/Images", extension='.png'):
     if isImageOnScreen(image, path, extension):
         x, y = pag.locateCenterOnScreen(
             path+"/"+image+extension, confidence=0.9)
-        pag.moveTo(x, y, 0.5)
+        pag.moveTo(x, y, 0.05)
         pag.click()
+        return True
+    return False
 
 
 def isAnyImageOnScreen(image, number_of_images=2, path="E:/Python Programs/Images", extension='.png'):
