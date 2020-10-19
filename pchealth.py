@@ -3,23 +3,8 @@ import shutil
 import psutil
 from pyautogui import alert
 from mymodules.speech import say
-
-# def check_disk_usage(min_absolute=250, min_percent=100):
-#     du_C = shutil.disk_usage('C:/')
-#     du_E = shutil.disk_usage('E:/')
-#     percent_free = (du_C.free + du_E.free)/(du_C.total + du_E.total)*100
-#     gigabytes_free = (du_C.free + du_E.free) / 2**30
-#     print("\n"+"[FREE DISK]".ljust(17) + f"{percent_free:.2f}%")
-#     print("[FREE DISK]".ljust(17) + f"{gigabytes_free:.2f} GB".ljust(14), end="")
-#     if percent_free < min_percent or gigabytes_free < min_absolute:
-#         return False
-#     return True
-
-
-def seconds_to_hours(sec):
-    mm, ss = divmod(sec, 60)
-    hh, mm = divmod(mm, 60)
-    return hh, mm, ss
+from mymodules.time import from_seconds
+import os
 
 
 def check_disk_usage_percent(min_percent=50):
@@ -62,12 +47,18 @@ def check_charging(min_charging=65):
 
     print("\n"+"[PC-POWER]".ljust(17) + f"{power}".ljust(14), end="")
     print("-".rjust(4))
-    hh, mm, ss = seconds_to_hours(battery.secsleft)
+    _, hh, mm, ss = from_seconds(battery.secsleft)
     print("\n"+"[TIME-LEFT]".ljust(17) + f"{hh}:{mm}:{ss}".ljust(14), end="")
     print("-".rjust(4))
     print("\n"+"[BATTERY]".ljust(17) + f"{percent}%".ljust(14), end="")
 
     return charging
+
+
+def check_reboot():
+    """Returns True if the computer has a pending reboot."""
+    # Only in linux
+    return os.path.exists("/run/reboot-required")
 
 
 def pc_health():
